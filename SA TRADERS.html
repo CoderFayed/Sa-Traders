@@ -1,0 +1,2773 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SA Traders - হিসাব ব্যবস্থাপনা</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .contact-info {
+            text-align: right;
+            font-size: 14px;
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 50px auto;
+        }
+        
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2a5298;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            transform: translateY(-2px);
+        }
+        
+        .dashboard {
+            display: none;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: initial;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h3 {
+            margin-bottom: 15px;
+            color: #2a5298;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-info {
+            background: #17a2b8;
+        }
+        
+        .btn-info:hover {
+            background: #138496;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        
+        .customer-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .transaction-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .product-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .purchase-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .commission-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .statement-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .statement-options select, .statement-options input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .delete-btn:hover {
+            background: #c82333;
+        }
+        
+        .edit-btn {
+            background: #ffc107;
+            color: #212529;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        
+        .edit-btn:hover {
+            background: #e0a800;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .amount-display {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .stock-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .commission-info {
+            background-color: #e8f5e8;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .stock-low {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .stock-medium {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        
+        .stock-high {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .profit-positive {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .profit-negative {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .profit-neutral {
+            color: #6c757d;
+            font-weight: bold;
+        }
+
+        /* প্রিন্ট স্টাইল */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-section, .print-section * {
+                visibility: visible;
+            }
+            .print-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .excel-table {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 12px;
+            }
+            .excel-table th, .excel-table td {
+                border: 1px solid #000;
+                padding: 6px 8px;
+                text-align: left;
+            }
+            .excel-table th {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            .summary-box {
+                border: 1px solid #000;
+                padding: 10px;
+                margin-top: 15px;
+                background-color: #f9f9f9;
+            }
+            
+            /* প্রিন্ট হেডার স্টাইল - কালার সহ */
+            .print-header {
+                background: linear-gradient(135deg, #1e3c72, #2a5298) !important;
+                color: white !important;
+                padding: 25px;
+                text-align: center;
+                border-radius: 12px;
+                margin-bottom: 25px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                border: 2px solid #1e3c72;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .print-header .logo {
+                font-size: 32px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                color: white !important;
+            }
+            
+            .print-header .tagline {
+                font-size: 18px;
+                font-weight: 500;
+                margin-bottom: 15px;
+                opacity: 0.9;
+                color: white !important;
+            }
+            
+            .print-header .contact-info {
+                display: flex;
+                justify-content: center;
+                gap: 30px;
+                font-size: 14px;
+                margin-top: 10px;
+                color: white !important;
+            }
+            
+            .print-header .contact-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: white !important;
+            }
+            
+            .print-header .contact-item i {
+                font-size: 16px;
+                color: white !important;
+            }
+        }
+
+        /* এক্সেল স্টাইল টেবিল */
+        .excel-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        .excel-table th, .excel-table td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        .excel-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+        }
+        .excel-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .summary-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .summary-box h4 {
+            margin-bottom: 10px;
+            color: #2a5298;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            padding: 5px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        /* প্রিন্ট হেডার স্টাইল (স্ক্রিনের জন্য) */
+        .print-header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid #1e3c72;
+        }
+        
+        .print-header .logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .print-header .tagline {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .print-header .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .print-header .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .print-header .contact-item i {
+            font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+            }
+            
+            .contact-info {
+                margin-top: 10px;
+                text-align: center;
+            }
+            
+            .customer-form, .transaction-form, .product-form, .purchase-form, .commission-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .statement-options {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .excel-table {
+                font-size: 12px;
+            }
+            
+            .excel-table th, .excel-table td {
+                padding: 4px 6px;
+            }
+            
+            .print-header .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .print-header {
+                padding: 20px 15px;
+            }
+            
+            .print-header .logo {
+                font-size: 24px;
+            }
+            
+            .print-header .tagline {
+                font-size: 16px;
+            }
+        }
+    </style>
+    <!-- আইকন লাইব্রেরি -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">SA Traders</div>
+                <div class="contact-info">
+                    <p>বগুড়া</p>
+                    <p>ফোন: ০১৭১৩-৬৪৫৮৮৩</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- লগইন ফর্ম -->
+        <div id="loginForm" class="login-container">
+            <h2>লগইন করুন</h2>
+            <form id="login">
+                <div class="form-group">
+                    <label for="password">পাসওয়ার্ড</label>
+                    <input type="password" id="password" placeholder="পাসওয়ার্ড দিন" required>
+                </div>
+                <button type="submit" class="btn">লগইন</button>
+            </form>
+        </div>
+
+        <!-- ড্যাশবোর্ড -->
+        <div id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h2>SA Traders - হিসাব ব্যবস্থাপনা</h2>
+                <button class="logout-btn" id="logoutBtn">লগআউট</button>
+            </div>
+
+            <!-- ডেটা ম্যানেজমেন্ট সিস্টেম -->
+            <div class="card">
+                <h3>ডেটা ম্যানেজমেন্ট</h3>
+                <div class="action-buttons">
+                    <button class="btn btn-success" id="saveDataBtn">সমস্ত ডেটা সেভ করুন</button>
+                    <button class="btn btn-info" id="loadDataBtn">ডেটা লোড করুন</button>
+                    <button class="btn btn-warning" id="backupDataBtn">ব্যাকআপ তৈরি করুন</button>
+                    <button class="btn btn-secondary" id="restoreBackupBtn">ব্যাকআপ থেকে রিস্টোর করুন</button>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                    <h4 style="color: #2a5298; margin-bottom: 10px;">ডেটা স্ট্যাটাস</h4>
+                    <div id="dataStatus">
+                        <!-- ডেটা স্ট্যাটাস এখানে দেখাবে -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- পণ্য ব্যবস্থাপনা -->
+            <div class="card">
+                <h3>পণ্য ব্যবস্থাপনা</h3>
+                <form id="productManagementForm" class="product-form">
+                    <div class="form-group">
+                        <label for="productId">পণ্য আইডি</label>
+                        <input type="text" id="productId" placeholder="পণ্য আইডি" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productName">পণ্যের নাম</label>
+                        <input type="text" id="productName" placeholder="পণ্যের নাম" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPurchasePrice">ক্রয় মূল্য (প্রতি ইউনিট)</label>
+                        <input type="number" id="productPurchasePrice" placeholder="ক্রয় মূল্য" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productSellingPrice">বিক্রয় মূল্য (প্রতি ইউনিট)</label>
+                        <input type="number" id="productSellingPrice" placeholder="বিক্রয় মূল্য" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productStock">প্রারম্ভিক স্টক</label>
+                        <input type="number" id="productStock" placeholder="স্টক পরিমাণ" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productCategory">পণ্য ক্যাটাগরি</label>
+                        <input type="text" id="productCategory" placeholder="ক্যাটাগরি">
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">বিবরণ</label>
+                        <input type="text" id="productDescription" placeholder="বিবরণ">
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-success">পণ্য যোগ করুন</button>
+                        <button type="button" class="btn btn-info" id="updateProductBtn" style="display: none;">পণ্য আপডেট করুন</button>
+                        <button type="button" class="btn btn-secondary" id="cancelEditBtn" style="display: none;">বাতিল করুন</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- কমিশন রেট সেটিং -->
+            <div class="card">
+                <h3>কমিশন রেট সেটিং</h3>
+                <form id="commissionForm" class="commission-form">
+                    <div class="form-group">
+                        <label for="commissionRate">প্রতি পণ্যের কমিশন রেট (টাকা)</label>
+                        <input type="number" id="commissionRate" placeholder="কমিশন রেট" required>
+                    </div>
+                    <button type="submit" class="btn">কমিশন রেট সেভ করুন</button>
+                </form>
+                <div class="commission-info" id="currentCommissionInfo">
+                    বর্তমান কমিশন রেট: 0 টাকা প্রতি পণ্য
+                </div>
+            </div>
+
+            <!-- পণ্য ক্রয় ফর্ম -->
+            <div class="card">
+                <h3>পণ্য ক্রয় করুন</h3>
+                <form id="purchaseProductForm" class="purchase-form">
+                    <div class="form-group">
+                        <label for="purchaseProductId">পণ্য আইডি</label>
+                        <input type="text" id="purchaseProductId" placeholder="পণ্য আইডি" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchaseProductName">পণ্যের নাম</label>
+                        <input type="text" id="purchaseProductName" placeholder="পণ্যের নাম" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchaseProductPrice">ক্রয় মূল্য (প্রতি ইউনিট)</label>
+                        <input type="number" id="purchaseProductPrice" placeholder="ক্রয় মূল্য" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchaseProductQuantity">ক্রয় পরিমাণ</label>
+                        <input type="number" id="purchaseProductQuantity" placeholder="পরিমাণ" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchaseProductSupplier">সাপ্লাইয়ার</label>
+                        <input type="text" id="purchaseProductSupplier" placeholder="সাপ্লাইয়ারের নাম" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchaseTotalAmount">মোট ক্রয় মূল্য</label>
+                        <input type="number" id="purchaseTotalAmount" placeholder="মোট ক্রয় মূল্য" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchasePaidAmount">জমা দেওয়া টাকা</label>
+                        <input type="number" id="purchasePaidAmount" placeholder="জমা দেওয়া টাকা" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchaseDueAmount">বাকি টাকা</label>
+                        <input type="number" id="purchaseDueAmount" placeholder="বাকি টাকা" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchaseProductDate">ক্রয় তারিখ</label>
+                        <input type="date" id="purchaseProductDate" required>
+                    </div>
+                    <button type="submit" class="btn">পণ্য ক্রয় করুন</button>
+                </form>
+            </div>
+
+            <!-- ক্রেতা যোগ করার ফর্ম -->
+            <div class="card">
+                <h3>নতুন ক্রেতা যোগ করুন</h3>
+                <form id="addCustomerForm" class="customer-form">
+                    <div class="form-group">
+                        <label for="customerId">ক্রেতা আইডি</label>
+                        <input type="text" id="customerId" placeholder="ক্রেতা আইডি" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerName">ক্রেতার নাম</label>
+                        <input type="text" id="customerName" placeholder="ক্রেতার নাম" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerPhone">ফোন নম্বর</label>
+                        <input type="text" id="customerPhone" placeholder="ফোন নম্বর">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerAddress">ঠিকানা</label>
+                        <input type="text" id="customerAddress" placeholder="ঠিকানা">
+                    </div>
+                    <button type="submit" class="btn">ক্রেতা যোগ করুন</button>
+                </form>
+            </div>
+
+            <!-- লেনদেন ফর্ম (শুধুমাত্র বিক্রয়) -->
+            <div class="card">
+                <h3>পণ্য বিক্রয় করুন</h3>
+                <form id="addTransactionForm" class="transaction-form">
+                    <div class="form-group">
+                        <label for="transactionCustomerId">ক্রেতা আইডি</label>
+                        <input type="text" id="transactionCustomerId" placeholder="ক্রেতা আইডি" required>
+                        <div class="error-message" id="customerError">ক্রেতা আইডি পাওয়া যায়নি! প্রথমে ক্রেতা যোগ করুন।</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionProductId">পণ্য নির্বাচন করুন</label>
+                        <select id="transactionProductId" required>
+                            <option value="">পণ্য নির্বাচন করুন</option>
+                        </select>
+                        <div class="error-message" id="productError">পণ্য আইডি পাওয়া যায়নি! প্রথমে পণ্য যোগ করুন।</div>
+                        <div class="stock-info" id="productStockInfo">স্টক: 0</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionQuantity">পণ্যের পরিমাণ</label>
+                        <input type="number" id="transactionQuantity" placeholder="পরিমাণ" min="1" required>
+                        <div class="error-message" id="stockError">স্টক পর্যাপ্ত নেই!</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionUnitPrice">বিক্রয় মূল্য (প্রতি ইউনিট)</label>
+                        <input type="number" id="transactionUnitPrice" placeholder="বিক্রয় মূল্য" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="amount-display" id="totalAmountDisplay">
+                            মোট মূল্য: 0 টাকা
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="paidAmount">পরিশোধিত টাকার পরিমাণ</label>
+                        <input type="number" id="paidAmount" placeholder="পরিশোধিত টাকা">
+                        <div class="payment-option">
+                            <input type="checkbox" id="noPayment" name="noPayment">
+                            <label for="noPayment">আজকে কোনো টাকা জমা দেননি</label>
+                        </div>
+                        <div class="amount-display" id="dueAmountDisplay">
+                            বাকি টাকা: 0 টাকা
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="transactionDate">বিক্রয় তারিখ</label>
+                        <input type="date" id="transactionDate" required>
+                    </div>
+                    <button type="submit" class="btn">বিক্রয় সম্পন্ন করুন</button>
+                </form>
+            </div>
+
+            <!-- স্টেটমেন্ট তৈরি -->
+            <div class="card">
+                <h3>হিসাব বিবরণী তৈরি করুন</h3>
+                <div class="statement-options">
+                    <div class="form-group">
+                        <label for="statementCustomerId">ক্রেতা আইডি</label>
+                        <input type="text" id="statementCustomerId" placeholder="ক্রেতা আইডি">
+                    </div>
+                    <div class="form-group">
+                        <label for="statementPeriod">সময়কাল</label>
+                        <select id="statementPeriod">
+                            <option value="all">সমস্ত সময়</option>
+                            <option value="daily">দৈনিক</option>
+                            <option value="monthly">মাসিক</option>
+                            <option value="yearly">বার্ষিক</option>
+                            <option value="custom">নির্দিষ্ট তারিখ</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="customDateRange" style="display: none;">
+                        <label for="startDate">শুরুর তারিখ</label>
+                        <input type="date" id="startDate">
+                        <label for="endDate">শেষ তারিখ</label>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-success" id="generateCustomerStatementBtn">ক্রেতা বিবরণী তৈরি করুন</button>
+                    <button class="btn btn-info" id="generateProductStatementBtn">পণ্য বিক্রয় বিবরণী</button>
+                    <button class="btn btn-warning" id="generatePurchaseStatementBtn">পণ্য ক্রয় বিবরণী</button>
+                    <button class="btn btn-danger" id="generateProfitLossStatementBtn">লাভ-ক্ষতি বিবরণী</button>
+                    <button class="btn btn-secondary" id="printStatementBtn" style="display: none;">প্রিন্ট করুন</button>
+                </div>
+                
+                <div id="statementResult" style="margin-top: 20px;"></div>
+            </div>
+
+            <!-- পণ্যের তালিকা (স্টক সহ) -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3>পণ্যের তালিকা (স্টক)</h3>
+                    <button class="btn btn-info" id="printStockBtn">স্টক রিপোর্ট প্রিন্ট করুন</button>
+                </div>
+                <table id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>পণ্য আইডি</th>
+                            <th>পণ্যের নাম</th>
+                            <th>ক্রয় মূল্য</th>
+                            <th>বিক্রয় মূল্য</th>
+                            <th>বর্তমান স্টক</th>
+                            <th>স্টক স্ট্যাটাস</th>
+                            <th>মোট ক্রয়</th>
+                            <th>মোট বিক্রয়</th>
+                            <th>স্টক মূল্য</th>
+                            <th>ক্যাটাগরি</th>
+                            <th>অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsList">
+                        <!-- পণ্যের তালিকা এখানে যোগ হবে -->
+                    </tbody>
+                </table>
+                <div class="summary-box" style="margin-top: 20px;">
+                    <h4>স্টক সারাংশ</h4>
+                    <div class="summary-item">
+                        <span>মোট পণ্য:</span>
+                        <span id="totalProducts">0 টি</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট স্টক পরিমাণ:</span>
+                        <span id="totalStockQuantity">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট স্টক মূল্য:</span>
+                        <span id="totalStockValue">0 টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>নিম্ন স্টক পণ্য:</span>
+                        <span id="lowStockProducts">0 টি</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- লাভ-ক্ষতি সারাংশ -->
+            <div class="card">
+                <h3>লাভ-ক্ষতি সারাংশ</h3>
+                <div class="summary-box">
+                    <div class="summary-item">
+                        <span>মোট ক্রয় মূল্য:</span>
+                        <span id="totalPurchaseValue">0 টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট বিক্রয় মূল্য:</span>
+                        <span id="totalSalesValue">0 টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট কমিশন:</span>
+                        <span id="totalCommissionValue">0 টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট লাভ/ক্ষতি:</span>
+                        <span id="totalProfitLoss" class="profit-neutral">0 টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>লাভ/ক্ষতি শতাংশ:</span>
+                        <span id="profitLossPercentage">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ক্রেতাদের তালিকা -->
+            <div class="card">
+                <h3>ক্রেতাদের তালিকা</h3>
+                <table id="customersTable">
+                    <thead>
+                        <tr>
+                            <th>ক্রেতা আইডি</th>
+                            <th>নাম</th>
+                            <th>ফোন</th>
+                            <th>ঠিকানা</th>
+                            <th>অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersList">
+                        <!-- ক্রেতাদের তালিকা এখানে যোগ হবে -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- বিক্রয়ের তালিকা -->
+            <div class="card">
+                <h3>বিক্রয়ের তালিকা</h3>
+                <table id="transactionsTable">
+                    <thead>
+                        <tr>
+                            <th>তারিখ</th>
+                            <th>ক্রেতা আইডি</th>
+                            <th>পণ্য</th>
+                            <th>পরিমাণ</th>
+                            <th>ক্রয় মূল্য</th>
+                            <th>বিক্রয় মূল্য</th>
+                            <th>লাভ/ক্ষতি</th>
+                            <th>মোট মূল্য</th>
+                            <th>জমা</th>
+                            <th>বাকি</th>
+                            <th>অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsList">
+                        <!-- লেনদেনের তালিকা এখানে যোগ হবে -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ক্রয়ের তালিকা -->
+            <div class="card">
+                <h3>ক্রয়ের তালিকা</h3>
+                <table id="purchasesTable">
+                    <thead>
+                        <tr>
+                            <th>তারিখ</th>
+                            <th>পণ্য আইডি</th>
+                            <th>পণ্যের নাম</th>
+                            <th>সাপ্লাইয়ার</th>
+                            <th>পরিমাণ</th>
+                            <th>ক্রয় মূল্য</th>
+                            <th>মোট মূল্য</th>
+                            <th>জমা</th>
+                            <th>বাকি</th>
+                            <th>অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="purchasesList">
+                        <!-- ক্রয়ের তালিকা এখানে যোগ হবে -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // উন্নত ডেটা সংরক্ষণ ব্যবস্থা
+        class DataManager {
+            constructor() {
+                this.storageKey = 'saTradersData';
+                this.backupKey = 'saTradersBackup';
+                this.init();
+            }
+            
+            init() {
+                // প্রথম লোডে ডেটা চেক করুন
+                if (!this.loadData()) {
+                    // কোনো ডেটা না থাকলে ডিফল্ট ডেটা সেট করুন
+                    this.saveDefaultData();
+                }
+            }
+            
+            saveDefaultData() {
+                const defaultData = {
+                    customers: [],
+                    products: [],
+                    transactions: [],
+                    purchases: [],
+                    commissionRate: 0,
+                    lastUpdated: new Date().toISOString()
+                };
+                this.saveAllData(defaultData);
+            }
+            
+            saveAllData(data) {
+                try {
+                    const dataToSave = {
+                        ...data,
+                        lastUpdated: new Date().toISOString(),
+                        version: '2.0'
+                    };
+                    localStorage.setItem(this.storageKey, JSON.stringify(dataToSave));
+                    return true;
+                } catch (error) {
+                    console.error('ডেটা সেভ করতে সমস্যা:', error);
+                    return false;
+                }
+            }
+            
+            loadData() {
+                try {
+                    const data = localStorage.getItem(this.storageKey);
+                    if (data) {
+                        const parsedData = JSON.parse(data);
+                        
+                        // ডেটা ভ্যালিডেশন
+                        if (this.validateData(parsedData)) {
+                            return parsedData;
+                        }
+                    }
+                    return null;
+                } catch (error) {
+                    console.error('ডেটা লোড করতে সমস্যা:', error);
+                    return null;
+                }
+            }
+            
+            validateData(data) {
+                const requiredKeys = ['customers', 'products', 'transactions', 'purchases', 'commissionRate'];
+                return requiredKeys.every(key => key in data);
+            }
+            
+            createBackup() {
+                try {
+                    const currentData = this.loadData();
+                    if (currentData) {
+                        localStorage.setItem(this.backupKey, JSON.stringify(currentData));
+                        return true;
+                    }
+                    return false;
+                } catch (error) {
+                    console.error('ব্যাকআপ তৈরি করতে সমস্যা:', error);
+                    return false;
+                }
+            }
+            
+            restoreFromBackup() {
+                try {
+                    const backupData = localStorage.getItem(this.backupKey);
+                    if (backupData) {
+                        const parsedData = JSON.parse(backupData);
+                        if (this.validateData(parsedData)) {
+                            this.saveAllData(parsedData);
+                            return true;
+                        }
+                    }
+                    return false;
+                } catch (error) {
+                    console.error('ব্যাকআপ থেকে রিস্টোর করতে সমস্যা:', error);
+                    return false;
+                }
+            }
+            
+            exportData() {
+                const data = this.loadData();
+                if (data) {
+                    const dataStr = JSON.stringify(data, null, 2);
+                    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                    const url = URL.createObjectURL(dataBlob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `SA_Traders_Data_${new Date().toISOString().split('T')[0]}.json`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    return true;
+                }
+                return false;
+            }
+            
+            importData(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const importedData = JSON.parse(e.target.result);
+                            if (this.validateData(importedData)) {
+                                this.saveAllData(importedData);
+                                resolve(true);
+                            } else {
+                                reject(new Error('ইনভ্যালিড ডেটা ফরম্যাট'));
+                            }
+                        } catch (error) {
+                            reject(error);
+                        }
+                    };
+                    reader.onerror = () => reject(new Error('ফাইল পড়তে সমস্যা'));
+                    reader.readAsText(file);
+                });
+            }
+        }
+
+        // গ্লোবাল ডেটা ম্যানেজার ইনস্ট্যান্স
+        const dataManager = new DataManager();
+
+        // পাসওয়ার্ড চেক
+        document.getElementById('login').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            
+            if (password === '884164') {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                initializeDashboard();
+            } else {
+                alert('ভুল পাসওয়ার্ড! সঠিক পাসওয়ার্ড দিন।');
+            }
+        });
+
+        // তারিখ সেট করার ফাংশন
+        function setCurrentDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('purchaseProductDate').value = today;
+            document.getElementById('transactionDate').value = today;
+            document.getElementById('startDate').value = today;
+            document.getElementById('endDate').value = today;
+        }
+
+        // লগআউট
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('password').value = '';
+        });
+
+        // কমিশন রেট সেভ করা
+        document.getElementById('commissionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const commissionRate = parseFloat(document.getElementById('commissionRate').value) || 0;
+            
+            const currentData = dataManager.loadData();
+            currentData.commissionRate = commissionRate;
+            dataManager.saveAllData(currentData);
+            
+            loadCommissionRate();
+            
+            alert('কমিশন রেট সফলভাবে সেভ করা হয়েছে!');
+        });
+
+        // কমিশন রেট লোড করা
+        function loadCommissionRate() {
+            const data = dataManager.loadData();
+            const commissionRate = data.commissionRate || 0;
+            document.getElementById('currentCommissionInfo').textContent = 
+                `বর্তমান কমিশন রেট: ${formatNumber(commissionRate)} টাকা প্রতি পণ্য`;
+        }
+
+        // পণ্য ব্যবস্থাপনা ফর্ম
+        document.getElementById('productManagementForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            addOrUpdateProduct();
+        });
+
+        // পণ্য যোগ বা আপডেট করার ফাংশন
+        function addOrUpdateProduct() {
+            const productId = document.getElementById('productId').value.trim();
+            const productName = document.getElementById('productName').value.trim();
+            const purchasePrice = parseFloat(document.getElementById('productPurchasePrice').value) || 0;
+            const sellingPrice = parseFloat(document.getElementById('productSellingPrice').value) || 0;
+            const stock = parseInt(document.getElementById('productStock').value) || 0;
+            const category = document.getElementById('productCategory').value.trim();
+            const description = document.getElementById('productDescription').value.trim();
+            
+            const data = dataManager.loadData();
+            const products = data.products;
+            const existingProductIndex = products.findIndex(p => p.id === productId);
+            
+            if (existingProductIndex !== -1) {
+                // বিদ্যমান পণ্য আপডেট
+                products[existingProductIndex].name = productName;
+                products[existingProductIndex].purchasePrice = purchasePrice;
+                products[existingProductIndex].sellingPrice = sellingPrice;
+                products[existingProductIndex].stock = stock;
+                products[existingProductIndex].category = category;
+                products[existingProductIndex].description = description;
+                products[existingProductIndex].lastUpdated = new Date().toISOString().split('T')[0];
+                
+                alert('পণ্য সফলভাবে আপডেট করা হয়েছে!');
+            } else {
+                // নতুন পণ্য যোগ
+                products.push({
+                    id: productId,
+                    name: productName,
+                    purchasePrice: purchasePrice,
+                    sellingPrice: sellingPrice,
+                    stock: stock,
+                    totalPurchased: stock,
+                    totalSold: 0,
+                    category: category,
+                    description: description,
+                    lastUpdated: new Date().toISOString().split('T')[0]
+                });
+                
+                alert('পণ্য সফলভাবে যোগ করা হয়েছে!');
+            }
+            
+            data.products = products;
+            dataManager.saveAllData(data);
+            
+            // ফর্ম রিসেট
+            document.getElementById('productManagementForm').reset();
+            document.getElementById('updateProductBtn').style.display = 'none';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+            document.querySelector('#productManagementForm button[type="submit"]').style.display = 'block';
+            
+            // তালিকা আপডেট
+            loadProducts();
+            updateProductDropdown();
+            updateProfitLossSummary();
+            updateDataStatus();
+        }
+
+        // পণ্য এডিট ফাংশন
+        function editProduct(index) {
+            const data = dataManager.loadData();
+            const product = data.products[index];
+            
+            document.getElementById('productId').value = product.id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productPurchasePrice').value = product.purchasePrice;
+            document.getElementById('productSellingPrice').value = product.sellingPrice;
+            document.getElementById('productStock').value = product.stock;
+            document.getElementById('productCategory').value = product.category || '';
+            document.getElementById('productDescription').value = product.description || '';
+            
+            document.getElementById('updateProductBtn').style.display = 'block';
+            document.getElementById('cancelEditBtn').style.display = 'block';
+            document.querySelector('#productManagementForm button[type="submit"]').style.display = 'none';
+        }
+
+        // এডিট বাতিল ফাংশন
+        document.getElementById('cancelEditBtn').addEventListener('click', function() {
+            document.getElementById('productManagementForm').reset();
+            document.getElementById('updateProductBtn').style.display = 'none';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+            document.querySelector('#productManagementForm button[type="submit"]').style.display = 'block';
+        });
+
+        // আপডেট বাটন ইভেন্ট
+        document.getElementById('updateProductBtn').addEventListener('click', function() {
+            addOrUpdateProduct();
+        });
+
+        // পণ্য ক্রয় ফর্ম ইভেন্ট লিসেনার
+        document.getElementById('purchaseProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            purchaseProduct();
+        });
+
+        // ক্রয় মূল্য এবং পরিমাণ পরিবর্তনে মোট মূল্য হিসাব
+        document.getElementById('purchaseProductPrice').addEventListener('input', calculatePurchaseTotal);
+        document.getElementById('purchaseProductQuantity').addEventListener('input', calculatePurchaseTotal);
+        
+        // জমা দেওয়া টাকা পরিবর্তনে বাকি টাকা হিসাব
+        document.getElementById('purchasePaidAmount').addEventListener('input', calculatePurchaseDue);
+
+        // পণ্য ক্রয় করা
+        function purchaseProduct() {
+            const productId = document.getElementById('purchaseProductId').value.trim();
+            const productName = document.getElementById('purchaseProductName').value.trim();
+            const purchasePrice = parseFloat(document.getElementById('purchaseProductPrice').value) || 0;
+            const quantity = parseInt(document.getElementById('purchaseProductQuantity').value) || 0;
+            const supplier = document.getElementById('purchaseProductSupplier').value.trim();
+            const totalAmount = parseFloat(document.getElementById('purchaseTotalAmount').value) || 0;
+            const paidAmount = parseFloat(document.getElementById('purchasePaidAmount').value) || 0;
+            const dueAmount = parseFloat(document.getElementById('purchaseDueAmount').value) || 0;
+            const date = document.getElementById('purchaseProductDate').value;
+            
+            const data = dataManager.loadData();
+            
+            // ক্রয় তথ্য সংরক্ষণ
+            const purchases = data.purchases;
+            purchases.push({
+                productId: productId,
+                productName: productName,
+                purchasePrice: purchasePrice,
+                quantity: quantity,
+                supplier: supplier,
+                totalAmount: totalAmount,
+                paidAmount: paidAmount,
+                dueAmount: dueAmount,
+                date: date
+            });
+            data.purchases = purchases;
+            
+            // পণ্য স্টক আপডেট
+            updateProductStock(productId, productName, purchasePrice, quantity, date, data);
+            
+            dataManager.saveAllData(data);
+            
+            // ফর্ম রিসেট
+            document.getElementById('purchaseProductForm').reset();
+            setCurrentDate();
+            
+            // তালিকা আপডেট
+            loadProducts();
+            loadPurchases();
+            updateProductDropdown();
+            updateProfitLossSummary();
+            updateDataStatus();
+            
+            alert('পণ্য সফলভাবে ক্রয় করা হয়েছে!');
+        }
+
+        // ক্রয়ের মোট মূল্য হিসাব
+        function calculatePurchaseTotal() {
+            const price = parseFloat(document.getElementById('purchaseProductPrice').value) || 0;
+            const quantity = parseInt(document.getElementById('purchaseProductQuantity').value) || 0;
+            const totalAmount = price * quantity;
+            
+            document.getElementById('purchaseTotalAmount').value = totalAmount;
+            calculatePurchaseDue();
+        }
+
+        // ক্রয়ের বাকি টাকা হিসাব
+        function calculatePurchaseDue() {
+            const totalAmount = parseFloat(document.getElementById('purchaseTotalAmount').value) || 0;
+            const paidAmount = parseFloat(document.getElementById('purchasePaidAmount').value) || 0;
+            const dueAmount = totalAmount - paidAmount;
+            
+            document.getElementById('purchaseDueAmount').value = dueAmount;
+        }
+
+        // পণ্য স্টক আপডেট
+        function updateProductStock(productId, productName, purchasePrice, quantity, date, data) {
+            const products = data.products;
+            const existingProductIndex = products.findIndex(p => p.id === productId);
+            
+            if (existingProductIndex !== -1) {
+                // বিদ্যমান পণ্য আপডেট
+                products[existingProductIndex].stock += quantity;
+                products[existingProductIndex].totalPurchased += quantity;
+                products[existingProductIndex].lastUpdated = date;
+            } else {
+                // নতুন পণ্য যোগ
+                products.push({
+                    id: productId,
+                    name: productName,
+                    purchasePrice: purchasePrice,
+                    sellingPrice: purchasePrice * 1.2, // 20% মার্জিন
+                    stock: quantity,
+                    totalPurchased: quantity,
+                    totalSold: 0,
+                    category: '',
+                    description: '',
+                    lastUpdated: date
+                });
+            }
+            
+            data.products = products;
+        }
+
+        // ক্রেতা যোগ করা
+        document.getElementById('addCustomerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const customerId = document.getElementById('customerId').value.trim();
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+            const customerAddress = document.getElementById('customerAddress').value.trim();
+            
+            const data = dataManager.loadData();
+            const customers = data.customers;
+            customers.push({
+                id: customerId,
+                name: customerName,
+                phone: customerPhone,
+                address: customerAddress
+            });
+            data.customers = customers;
+            dataManager.saveAllData(data);
+            
+            // ফর্ম রিসেট
+            document.getElementById('addCustomerForm').reset();
+            
+            // তালিকা আপডেট
+            loadCustomers();
+            updateDataStatus();
+            
+            alert('ক্রেতা সফলভাবে যোগ করা হয়েছে!');
+        });
+
+        // পণ্য নির্বাচন পরিবর্তন
+        document.getElementById('transactionProductId').addEventListener('change', function() {
+            const productId = this.value;
+            const data = dataManager.loadData();
+            const selectedProduct = data.products.find(product => product.id === productId);
+            
+            if (selectedProduct) {
+                document.getElementById('productStockInfo').textContent = `স্টক: ${selectedProduct.stock}`;
+                document.getElementById('productStockInfo').style.display = 'block';
+                document.getElementById('transactionUnitPrice').value = selectedProduct.sellingPrice || selectedProduct.purchasePrice * 1.2;
+                calculateTotalAmount();
+                checkStockAvailability();
+            } else {
+                document.getElementById('transactionUnitPrice').value = '';
+                document.getElementById('totalAmountDisplay').textContent = 'মোট মূল্য: 0 টাকা';
+                document.getElementById('productStockInfo').style.display = 'none';
+            }
+        });
+
+        // পরিমাণ পরিবর্তন
+        document.getElementById('transactionQuantity').addEventListener('input', function() {
+            calculateTotalAmount();
+            checkStockAvailability();
+        });
+
+        // বিক্রয় মূল্য পরিবর্তন
+        document.getElementById('transactionUnitPrice').addEventListener('input', function() {
+            calculateTotalAmount();
+        });
+        
+        // পরিশোধিত টাকা পরিবর্তন
+        document.getElementById('paidAmount').addEventListener('input', calculateDueAmount);
+        
+        // আজকে টাকা জমা না দেওয়ার অপশন
+        document.getElementById('noPayment').addEventListener('change', function() {
+            const paidAmountField = document.getElementById('paidAmount');
+            if (this.checked) {
+                paidAmountField.value = '0';
+                paidAmountField.disabled = true;
+            } else {
+                paidAmountField.disabled = false;
+            }
+            calculateDueAmount();
+        });
+
+        // স্টক চেক
+        function checkStockAvailability() {
+            const productId = document.getElementById('transactionProductId').value;
+            const quantity = parseInt(document.getElementById('transactionQuantity').value) || 0;
+            const data = dataManager.loadData();
+            const selectedProduct = data.products.find(product => product.id === productId);
+            
+            if (selectedProduct && quantity > selectedProduct.stock) {
+                document.getElementById('stockError').style.display = 'block';
+                return false;
+            } else {
+                document.getElementById('stockError').style.display = 'none';
+                return true;
+            }
+        }
+
+        // মোট মূল্য হিসাব
+        function calculateTotalAmount() {
+            const quantity = parseInt(document.getElementById('transactionQuantity').value) || 0;
+            const unitPrice = parseFloat(document.getElementById('transactionUnitPrice').value) || 0;
+            const totalAmount = quantity * unitPrice;
+            
+            document.getElementById('totalAmountDisplay').textContent = `মোট মূল্য: ${formatNumber(totalAmount)} টাকা`;
+            calculateDueAmount();
+        }
+
+        // বাকি টাকা হিসাব
+        function calculateDueAmount() {
+            const quantity = parseInt(document.getElementById('transactionQuantity').value) || 0;
+            const unitPrice = parseFloat(document.getElementById('transactionUnitPrice').value) || 0;
+            const totalAmount = quantity * unitPrice;
+            const paidAmount = parseFloat(document.getElementById('paidAmount').value) || 0;
+            const dueAmount = totalAmount - paidAmount;
+            
+            document.getElementById('dueAmountDisplay').textContent = `বাকি টাকা: ${formatNumber(dueAmount)} টাকা`;
+        }
+
+        // ক্রেতা আইডি থেকে ক্রেতার নাম পাওয়া
+        function getCustomerName(customerId) {
+            const data = dataManager.loadData();
+            const customer = data.customers.find(c => c.id === customerId);
+            return customer ? customer.name : 'নাম পাওয়া যায়নি';
+        }
+
+        // বিক্রয় যোগ করা
+        document.getElementById('addTransactionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const customerId = document.getElementById('transactionCustomerId').value.trim();
+            const productId = document.getElementById('transactionProductId').value;
+            const quantity = parseInt(document.getElementById('transactionQuantity').value) || 0;
+            const unitPrice = parseFloat(document.getElementById('transactionUnitPrice').value) || 0;
+            const totalAmount = quantity * unitPrice;
+            const paidAmount = parseFloat(document.getElementById('paidAmount').value) || 0;
+            const dueAmount = totalAmount - paidAmount;
+            const date = document.getElementById('transactionDate').value;
+            
+            const data = dataManager.loadData();
+            
+            // ক্রেতা আইডি চেক
+            const customerExists = data.customers.some(customer => customer.id === customerId);
+            
+            if (!customerExists) {
+                document.getElementById('customerError').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('customerError').style.display = 'none';
+            }
+            
+            // পণ্য আইডি চেক
+            const productExists = data.products.some(product => product.id === productId);
+            
+            if (!productExists) {
+                document.getElementById('productError').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('productError').style.display = 'none';
+            }
+            
+            // স্টক চেক
+            if (!checkStockAvailability()) {
+                alert('স্টক পর্যাপ্ত নেই!');
+                return;
+            }
+            
+            // ক্রয় মূল্য পাওয়া
+            const product = data.products.find(p => p.id === productId);
+            const purchasePrice = product ? product.purchasePrice : 0;
+            const profitLoss = (unitPrice - purchasePrice) * quantity;
+            
+            // স্টক আপডেট
+            const productIndex = data.products.findIndex(product => product.id === productId);
+            if (productIndex !== -1 && data.products[productIndex].stock >= quantity) {
+                data.products[productIndex].stock -= quantity;
+                data.products[productIndex].totalSold += quantity;
+                data.products[productIndex].lastUpdated = date;
+            } else {
+                alert('স্টক পর্যাপ্ত নেই!');
+                return;
+            }
+            
+            // বিক্রয় তথ্য সংরক্ষণ
+            const transactions = data.transactions;
+            transactions.push({
+                customerId: customerId,
+                productId: productId,
+                quantity: quantity,
+                unitPrice: unitPrice,
+                purchasePrice: purchasePrice,
+                profitLoss: profitLoss,
+                totalAmount: totalAmount,
+                paidAmount: paidAmount,
+                dueAmount: dueAmount,
+                date: date,
+                type: 'sale'
+            });
+            data.transactions = transactions;
+            
+            dataManager.saveAllData(data);
+            
+            // ফর্ম রিসেট
+            document.getElementById('addTransactionForm').reset();
+            document.getElementById('transactionUnitPrice').value = '';
+            document.getElementById('totalAmountDisplay').textContent = 'মোট মূল্য: 0 টাকা';
+            document.getElementById('dueAmountDisplay').textContent = 'বাকি টাকা: 0 টাকা';
+            document.getElementById('noPayment').checked = false;
+            document.getElementById('paidAmount').disabled = false;
+            document.getElementById('productStockInfo').style.display = 'none';
+            setCurrentDate();
+            
+            // তালিকা আপডেট
+            loadProducts();
+            loadTransactions();
+            updateProductDropdown();
+            updateProfitLossSummary();
+            updateDataStatus();
+            
+            alert('বিক্রয় সফলভাবে সম্পন্ন হয়েছে!');
+        });
+
+        // পণ্যের তালিকা লোড করা - আপডেট করা সংস্করণ (এডিট/ডিলিট বাটন সহ)
+        function loadProducts() {
+            const data = dataManager.loadData();
+            const products = data.products;
+            const productsList = document.getElementById('productsList');
+            productsList.innerHTML = '';
+            
+            let totalProducts = 0;
+            let totalStockQuantity = 0;
+            let totalStockValue = 0;
+            let lowStockProducts = 0;
+            
+            products.forEach((product, index) => {
+                const stockValue = product.stock * product.purchasePrice;
+                const stockStatus = getStockStatus(product.stock);
+                
+                totalProducts++;
+                totalStockQuantity += product.stock;
+                totalStockValue += stockValue;
+                
+                if (product.stock <= 10) {
+                    lowStockProducts++;
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>${product.name}</td>
+                    <td>${formatNumber(product.purchasePrice)} টাকা</td>
+                    <td>${formatNumber(product.sellingPrice || (product.purchasePrice * 1.2))} টাকা</td>
+                    <td>${product.stock}</td>
+                    <td class="${stockStatus.class}">${stockStatus.text}</td>
+                    <td>${product.totalPurchased || 0}</td>
+                    <td>${product.totalSold || 0}</td>
+                    <td>${formatNumber(stockValue)} টাকা</td>
+                    <td>${product.category || '-'}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editProduct(${index})">এডিট</button>
+                        <button class="delete-btn" onclick="deleteProduct(${index})">ডিলিট</button>
+                    </td>
+                `;
+                productsList.appendChild(row);
+            });
+            
+            // সারাংশ আপডেট
+            document.getElementById('totalProducts').textContent = `${totalProducts} টি`;
+            document.getElementById('totalStockQuantity').textContent = totalStockQuantity;
+            document.getElementById('totalStockValue').textContent = `${formatNumber(totalStockValue)} টাকা`;
+            document.getElementById('lowStockProducts').textContent = `${lowStockProducts} টি`;
+        }
+
+        // স্টক স্ট্যাটাস নির্ধারণ
+        function getStockStatus(stock) {
+            if (stock === 0) {
+                return { class: 'stock-low', text: 'স্টক নেই' };
+            } else if (stock <= 10) {
+                return { class: 'stock-low', text: 'নিম্ন স্টক' };
+            } else if (stock <= 25) {
+                return { class: 'stock-medium', text: 'মধ্যম স্টক' };
+            } else {
+                return { class: 'stock-high', text: 'পর্যাপ্ত স্টক' };
+            }
+        }
+
+        // পণ্য ডিলিট ফাংশন
+        function deleteProduct(index) {
+            if (confirm('আপনি কি এই পণ্য ডিলিট করতে চান? এই কাজটি বিপরীতযোগ্য নয়!')) {
+                const data = dataManager.loadData();
+                
+                // পণ্য ডিলিট
+                data.products.splice(index, 1);
+                dataManager.saveAllData(data);
+                
+                // তালিকা আপডেট
+                loadProducts();
+                updateProductDropdown();
+                updateProfitLossSummary();
+                updateDataStatus();
+                
+                alert('পণ্য সফলভাবে ডিলিট করা হয়েছে!');
+            }
+        }
+
+        // লাভ-ক্ষতি সারাংশ আপডেট
+        function updateProfitLossSummary() {
+            const data = dataManager.loadData();
+            const transactions = data.transactions;
+            const purchases = data.purchases;
+            const commissionRate = data.commissionRate || 0;
+            
+            let totalPurchaseValue = 0;
+            let totalSalesValue = 0;
+            let totalCommission = 0;
+            let totalProfitLoss = 0;
+            
+            // মোট ক্রয় মূল্য হিসাব
+            purchases.forEach(purchase => {
+                totalPurchaseValue += purchase.totalAmount || 0;
+            });
+            
+            // মোট বিক্রয় মূল্য ও লাভ-ক্ষতি হিসাব
+            transactions.forEach(transaction => {
+                totalSalesValue += transaction.totalAmount || 0;
+                totalCommission += (transaction.quantity || 0) * commissionRate;
+                totalProfitLoss += transaction.profitLoss || 0;
+            });
+            
+            // লাভ-ক্ষতি শতাংশ
+            const profitLossPercentage = totalPurchaseValue > 0 ? 
+                ((totalProfitLoss / totalPurchaseValue) * 100).toFixed(2) : 0;
+            
+            // UI আপডেট
+            document.getElementById('totalPurchaseValue').textContent = `${formatNumber(totalPurchaseValue)} টাকা`;
+            document.getElementById('totalSalesValue').textContent = `${formatNumber(totalSalesValue)} টাকা`;
+            document.getElementById('totalCommissionValue').textContent = `${formatNumber(totalCommission)} টাকা`;
+            
+            const profitLossElement = document.getElementById('totalProfitLoss');
+            profitLossElement.textContent = `${formatNumber(totalProfitLoss)} টাকা`;
+            
+            // রঙ নির্ধারণ
+            if (totalProfitLoss > 0) {
+                profitLossElement.className = 'profit-positive';
+            } else if (totalProfitLoss < 0) {
+                profitLossElement.className = 'profit-negative';
+            } else {
+                profitLossElement.className = 'profit-neutral';
+            }
+            
+            document.getElementById('profitLossPercentage').textContent = `${profitLossPercentage}%`;
+        }
+
+        // ক্রেতাদের তালিকা লোড করা
+        function loadCustomers() {
+            const data = dataManager.loadData();
+            const customers = data.customers;
+            const customersList = document.getElementById('customersList');
+            customersList.innerHTML = '';
+            
+            customers.forEach((customer, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${customer.id}</td>
+                    <td>${customer.name}</td>
+                    <td>${customer.phone}</td>
+                    <td>${customer.address}</td>
+                    <td>
+                        <button class="edit-btn" onclick="editCustomer(${index})">এডিট</button>
+                        <button class="delete-btn" onclick="deleteCustomer(${index})">ডিলিট</button>
+                    </td>
+                `;
+                customersList.appendChild(row);
+            });
+        }
+
+        // ক্রেতা এডিট ফাংশন
+        function editCustomer(index) {
+            const data = dataManager.loadData();
+            const customer = data.customers[index];
+            
+            document.getElementById('customerId').value = customer.id;
+            document.getElementById('customerName').value = customer.name;
+            document.getElementById('customerPhone').value = customer.phone || '';
+            document.getElementById('customerAddress').value = customer.address || '';
+            
+            alert('ক্রেতার তথ্য এডিট করার জন্য ফর্ম পূরণ করুন এবং ক্রেতা যোগ করুন বাটনে ক্লিক করুন');
+        }
+
+        // বিক্রয়ের তালিকা লোড করা
+        function loadTransactions() {
+            const data = dataManager.loadData();
+            const transactions = data.transactions;
+            const transactionsList = document.getElementById('transactionsList');
+            transactionsList.innerHTML = '';
+            
+            transactions.forEach((transaction, index) => {
+                const profitLossClass = transaction.profitLoss > 0 ? 'profit-positive' : 
+                                      transaction.profitLoss < 0 ? 'profit-negative' : 'profit-neutral';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.date}</td>
+                    <td>${transaction.customerId}</td>
+                    <td>${getProductName(transaction.productId)}</td>
+                    <td>${transaction.quantity}</td>
+                    <td>${formatNumber(transaction.purchasePrice)} টাকা</td>
+                    <td>${formatNumber(transaction.unitPrice)} টাকা</td>
+                    <td class="${profitLossClass}">${formatNumber(transaction.profitLoss)} টাকা</td>
+                    <td>${formatNumber(transaction.totalAmount)} টাকা</td>
+                    <td>${formatNumber(transaction.paidAmount)} টাকা</td>
+                    <td>${formatNumber(transaction.dueAmount)} টাকা</td>
+                    <td><button class="delete-btn" onclick="deleteTransaction(${index})">ডিলিট</button></td>
+                `;
+                transactionsList.appendChild(row);
+            });
+        }
+
+        // ক্রয়ের তালিকা লোড করা
+        function loadPurchases() {
+            const data = dataManager.loadData();
+            const purchases = data.purchases;
+            const purchasesList = document.getElementById('purchasesList');
+            purchasesList.innerHTML = '';
+            
+            purchases.forEach((purchase, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${purchase.date}</td>
+                    <td>${purchase.productId}</td>
+                    <td>${purchase.productName}</td>
+                    <td>${purchase.supplier}</td>
+                    <td>${purchase.quantity}</td>
+                    <td>${formatNumber(purchase.purchasePrice)} টাকা</td>
+                    <td>${formatNumber(purchase.totalAmount)} টাকা</td>
+                    <td>${formatNumber(purchase.paidAmount)} টাকা</td>
+                    <td>${formatNumber(purchase.dueAmount)} টাকা</td>
+                    <td><button class="delete-btn" onclick="deletePurchase(${index})">ডিলিট</button></td>
+                `;
+                purchasesList.appendChild(row);
+            });
+        }
+
+        // পণ্য আইডি থেকে পণ্যের নাম পাওয়া
+        function getProductName(productId) {
+            const data = dataManager.loadData();
+            const product = data.products.find(p => p.id === productId);
+            return product ? product.name : productId;
+        }
+
+        // ক্রেতা ডিলিট ফাংশন
+        function deleteCustomer(index) {
+            if (confirm('আপনি কি এই ক্রেতা ডিলিট করতে চান?')) {
+                const data = dataManager.loadData();
+                data.customers.splice(index, 1);
+                dataManager.saveAllData(data);
+                loadCustomers();
+                updateDataStatus();
+            }
+        }
+
+        // বিক্রয় ডিলিট ফাংশন
+        function deleteTransaction(index) {
+            if (confirm('আপনি কি এই বিক্রয় ডিলিট করতে চান?')) {
+                const data = dataManager.loadData();
+                const transaction = data.transactions[index];
+                
+                // স্টক ফেরত দিন
+                if (transaction) {
+                    const productIndex = data.products.findIndex(product => product.id === transaction.productId);
+                    
+                    if (productIndex !== -1) {
+                        data.products[productIndex].stock += transaction.quantity;
+                        data.products[productIndex].totalSold -= transaction.quantity;
+                    }
+                }
+                
+                data.transactions.splice(index, 1);
+                dataManager.saveAllData(data);
+                loadTransactions();
+                loadProducts();
+                updateProductDropdown();
+                updateProfitLossSummary();
+                updateDataStatus();
+            }
+        }
+
+        // ক্রয় ডিলিট ফাংশন
+        function deletePurchase(index) {
+            if (confirm('আপনি কি এই ক্রয় ডিলিট করতে চান?')) {
+                const data = dataManager.loadData();
+                const purchase = data.purchases[index];
+                
+                // স্টক হ্রাস করুন
+                if (purchase) {
+                    const productIndex = data.products.findIndex(product => product.id === purchase.productId);
+                    
+                    if (productIndex !== -1) {
+                        data.products[productIndex].stock -= purchase.quantity;
+                        data.products[productIndex].totalPurchased -= purchase.quantity;
+                        
+                        // যদি স্টক 0 বা নেগেটিভ হয়, তাহলে পণ্য ডিলিট করুন
+                        if (data.products[productIndex].stock <= 0) {
+                            data.products.splice(productIndex, 1);
+                        }
+                    }
+                }
+                
+                data.purchases.splice(index, 1);
+                dataManager.saveAllData(data);
+                loadPurchases();
+                loadProducts();
+                updateProductDropdown();
+                updateProfitLossSummary();
+                updateDataStatus();
+            }
+        }
+
+        // পণ্য ড্রপডাউন আপডেট - শুধুমাত্র স্টক আছে এমন পণ্য দেখাবে
+        function updateProductDropdown() {
+            const data = dataManager.loadData();
+            const products = data.products;
+            const productDropdown = document.getElementById('transactionProductId');
+            
+            // বর্তমান নির্বাচিত মান সংরক্ষণ
+            const currentValue = productDropdown.value;
+            
+            // অপশনগুলি আপডেট - শুধুমাত্র স্টক আছে এমন পণ্য
+            productDropdown.innerHTML = '<option value="">পণ্য নির্বাচন করুন</option>';
+            
+            products.forEach(product => {
+                if (product.stock > 0) {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = `${product.name} (ক্রয়: ${formatNumber(product.purchasePrice)} টাকা) - স্টক: ${product.stock}`;
+                    option.setAttribute('data-stock', product.stock);
+                    option.setAttribute('data-price', product.purchasePrice);
+                    productDropdown.appendChild(option);
+                }
+            });
+            
+            // পূর্বের নির্বাচিত মান পুনরায় সেট করুন (যদি উপলব্ধ থাকে)
+            if (currentValue && products.some(p => p.id === currentValue && p.stock > 0)) {
+                productDropdown.value = currentValue;
+                
+                // নির্বাচিত পণ্যের স্টক তথ্য আপডেট করুন
+                const selectedProduct = products.find(product => product.id === currentValue);
+                if (selectedProduct) {
+                    document.getElementById('productStockInfo').textContent = `স্টক: ${selectedProduct.stock}`;
+                    document.getElementById('productStockInfo').style.display = 'block';
+                    document.getElementById('transactionUnitPrice').value = selectedProduct.sellingPrice || selectedProduct.purchasePrice * 1.2;
+                }
+            }
+        }
+
+        // স্টেটমেন্ট অপশন পরিবর্তন
+        document.getElementById('statementPeriod').addEventListener('change', function() {
+            const customDateRange = document.getElementById('customDateRange');
+            if (this.value === 'custom') {
+                customDateRange.style.display = 'block';
+            } else {
+                customDateRange.style.display = 'none';
+            }
+        });
+
+        // সংখ্যা ফরম্যাটিং ফাংশন - শুধুমাত্র ইংরেজি সংখ্যা
+        function formatNumber(num) {
+            if (num === undefined || num === null || isNaN(num)) {
+                return '0';
+            }
+            // কমা দিয়ে সংখ্যা ফরম্যাট করা
+            return parseFloat(num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
+        // ক্রেতা স্টেটমেন্ট তৈরি
+        document.getElementById('generateCustomerStatementBtn').addEventListener('click', function() {
+            const customerId = document.getElementById('statementCustomerId').value;
+            const period = document.getElementById('statementPeriod').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            const data = dataManager.loadData();
+            let filteredTransactions = data.transactions;
+            
+            // ক্রেতা আইডি অনুযায়ী ফিল্টার
+            if (customerId) {
+                filteredTransactions = filteredTransactions.filter(t => t.customerId === customerId);
+            }
+            
+            // তারিখ অনুযায়ী ফিল্টার
+            filteredTransactions = filterByDate(filteredTransactions, period, startDate, endDate);
+            
+            // কমিশন রেট পাওয়া
+            const commissionRate = data.commissionRate || 0;
+            
+            // ক্রেতার নাম পাওয়া
+            const customerName = customerId ? getCustomerName(customerId) : 'সমস্ত ক্রেতা';
+            
+            // স্টেটমেন্ট তৈরি
+            let statementHTML = createStatementHeader('ক্রেতা বিক্রয় বিবরণী');
+            statementHTML += `
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;">
+                    <p style="margin: 5px 0;"><strong>ক্রেতা:</strong> ${customerName} ${customerId ? '(আইডি: ' + customerId + ')' : ''}</p>
+                    <p style="margin: 5px 0;"><strong>সময়কাল:</strong> ${getPeriodText(period, startDate, endDate)}</p>
+                </div>
+                
+                <table class="excel-table">
+                    <thead>
+                        <tr>
+                            <th>তারিখ</th>
+                            <th>ক্রেতা আইডি</th>
+                            <th>ক্রেতার নাম</th>
+                            <th>পণ্য</th>
+                            <th>পরিমাণ</th>
+                            <th>মোট মূল্য</th>
+                            <th>জমা</th>
+                            <th>বাকি</th>
+                            <th>কমিশন</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            let totalSales = 0;
+            let totalPaid = 0;
+            let totalDue = 0;
+            let totalCommission = 0;
+            
+            if (filteredTransactions.length === 0) {
+                statementHTML += `
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 20px; color: #666;">
+                            এই সময়কালে কোনো বিক্রয় লেনদেন পাওয়া যায়নি
+                        </td>
+                    </tr>
+                `;
+            } else {
+                filteredTransactions.forEach(transaction => {
+                    const commission = transaction.quantity * commissionRate;
+                    totalSales += transaction.totalAmount || 0;
+                    totalPaid += transaction.paidAmount || 0;
+                    totalDue += transaction.dueAmount || 0;
+                    totalCommission += commission || 0;
+                    
+                    statementHTML += `
+                        <tr>
+                            <td>${transaction.date}</td>
+                            <td>${transaction.customerId}</td>
+                            <td>${getCustomerName(transaction.customerId)}</td>
+                            <td>${getProductName(transaction.productId)}</td>
+                            <td>${transaction.quantity}</td>
+                            <td>${formatNumber(transaction.totalAmount)} টাকা</td>
+                            <td>${formatNumber(transaction.paidAmount)} টাকা</td>
+                            <td>${formatNumber(transaction.dueAmount)} টাকা</td>
+                            <td>${formatNumber(commission)} টাকা</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            statementHTML += `
+                    </tbody>
+                </table>
+                
+                <div class="summary-box" style="border: 2px solid #2a5298; background: linear-gradient(135deg, #f8f9fa, #e8f4f8);">
+                    <h4 style="text-align: center; margin-bottom: 15px; color: #2a5298; border-bottom: 1px solid #2a5298; padding-bottom: 5px;">সারসংক্ষেপ</h4>
+                    <div class="summary-item">
+                        <span>মোট বিক্রয়:</span>
+                        <span>${formatNumber(totalSales)} টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট জমা:</span>
+                        <span>${formatNumber(totalPaid)} টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট বাকি:</span>
+                        <span>${formatNumber(totalDue)} টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট কমিশন:</span>
+                        <span>${formatNumber(totalCommission)} টাকা</span>
+                    </div>
+                </div>
+            </div>
+            `;
+            
+            document.getElementById('statementResult').innerHTML = statementHTML;
+            document.getElementById('printStatementBtn').style.display = 'inline-block';
+        });
+
+        // পণ্য বিক্রয় স্টেটমেন্ট তৈরি
+        document.getElementById('generateProductStatementBtn').addEventListener('click', function() {
+            const period = document.getElementById('statementPeriod').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            const data = dataManager.loadData();
+            let filteredTransactions = filterByDate(data.transactions, period, startDate, endDate);
+            
+            // পণ্য অনুযায়ী গ্রুপ করা
+            const productSales = {};
+            filteredTransactions.forEach(transaction => {
+                if (!productSales[transaction.productId]) {
+                    productSales[transaction.productId] = {
+                        name: getProductName(transaction.productId),
+                        totalQuantity: 0,
+                        totalAmount: 0
+                    };
+                }
+                productSales[transaction.productId].totalQuantity += transaction.quantity || 0;
+                productSales[transaction.productId].totalAmount += transaction.totalAmount || 0;
+            });
+            
+            // কমিশন রেট পাওয়া
+            const commissionRate = data.commissionRate || 0;
+            
+            // স্টেটমেন্ট তৈরি
+            let statementHTML = createStatementHeader('পণ্য বিক্রয় বিবরণী');
+            statementHTML += `
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;">
+                    <p style="margin: 5px 0;"><strong>সময়কাল:</strong> ${getPeriodText(period, startDate, endDate)}</p>
+                </div>
+                
+                <table class="excel-table">
+                    <thead>
+                        <tr>
+                            <th>পণ্য আইডি</th>
+                            <th>পণ্যের নাম</th>
+                            <th>মোট বিক্রয় পরিমাণ</th>
+                            <th>মোট বিক্রয় মূল্য</th>
+                            <th>মোট কমিশন</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            let totalSales = 0;
+            let totalCommission = 0;
+            
+            if (Object.keys(productSales).length === 0) {
+                statementHTML += `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px; color: #666;">
+                            এই সময়কালে কোনো পণ্য বিক্রয় পাওয়া যায়নি
+                        </td>
+                    </tr>
+                `;
+            } else {
+                Object.keys(productSales).forEach(productId => {
+                    const product = productSales[productId];
+                    const commission = product.totalQuantity * commissionRate;
+                    totalSales += product.totalAmount || 0;
+                    totalCommission += commission || 0;
+                    
+                    statementHTML += `
+                        <tr>
+                            <td>${productId}</td>
+                            <td>${product.name}</td>
+                            <td>${product.totalQuantity}</td>
+                            <td>${formatNumber(product.totalAmount)} টাকা</td>
+                            <td>${formatNumber(commission)} টাকা</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            statementHTML += `
+                    </tbody>
+                </table>
+                
+                <div class="summary-box" style="border: 2px solid #2a5298; background: linear-gradient(135deg, #f8f9fa, #e8f4f8);">
+                    <h4 style="text-align: center; margin-bottom: 15px; color: #2a5298; border-bottom: 1px solid #2a5298; padding-bottom: 5px;">সারসংক্ষেপ</h4>
+                    <div class="summary-item">
+                        <span>মোট বিক্রয়:</span>
+                        <span>${formatNumber(totalSales)} টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট কমিশন:</span>
+                        <span>${formatNumber(totalCommission)} টাকা</span>
+                    </div>
+                </div>
+            </div>
+            `;
+            
+            document.getElementById('statementResult').innerHTML = statementHTML;
+            document.getElementById('printStatementBtn').style.display = 'inline-block';
+        });
+
+        // পণ্য ক্রয় স্টেটমেন্ট তৈরি
+        document.getElementById('generatePurchaseStatementBtn').addEventListener('click', function() {
+            const period = document.getElementById('statementPeriod').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            const data = dataManager.loadData();
+            let filteredPurchases = filterByDate(data.purchases, period, startDate, endDate, 'purchase');
+            
+            // সাপ্লাইয়ার অনুযায়ী গ্রুপ করা
+            const supplierAnalysis = {};
+            filteredPurchases.forEach(purchase => {
+                if (!supplierAnalysis[purchase.supplier]) {
+                    supplierAnalysis[purchase.supplier] = {
+                        totalAmount: 0,
+                        totalPaid: 0,
+                        totalDue: 0,
+                        purchaseCount: 0
+                    };
+                }
+                supplierAnalysis[purchase.supplier].totalAmount += purchase.totalAmount || 0;
+                supplierAnalysis[purchase.supplier].totalPaid += purchase.paidAmount || 0;
+                supplierAnalysis[purchase.supplier].totalDue += purchase.dueAmount || 0;
+                supplierAnalysis[purchase.supplier].purchaseCount += 1;
+            });
+            
+            // স্টেটমেন্ট তৈরি
+            let statementHTML = createStatementHeader('পণ্য ক্রয় বিবরণী');
+            statementHTML += `
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;">
+                    <p style="margin: 5px 0;"><strong>সময়কাল:</strong> ${getPeriodText(period, startDate, endDate)}</p>
+                </div>
+                
+                <h4 style="color: #2a5298; margin-bottom: 15px; border-bottom: 1px solid #2a5298; padding-bottom: 5px;">সাপ্লাইয়ার অনুযায়ী ক্রয় বিবরণী</h4>
+                <table class="excel-table">
+                    <thead>
+                        <tr>
+                            <th>সাপ্লাইয়ার</th>
+                            <th>ক্রয় সংখ্যা</th>
+                            <th>মোট ক্রয় মূল্য</th>
+                            <th>মোট জমা</th>
+                            <th>মোট বাকি</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            let totalPurchaseValue = 0;
+            let totalPaidAmount = 0;
+            let totalDueAmount = 0;
+            let totalPurchaseCount = 0;
+            
+            if (Object.keys(supplierAnalysis).length === 0) {
+                statementHTML += `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 20px; color: #666;">
+                            এই সময়কালে কোনো ক্রয় লেনদেন পাওয়া যায়নি
+                        </td>
+                    </tr>
+                `;
+            } else {
+                Object.keys(supplierAnalysis).forEach(supplier => {
+                    const data = supplierAnalysis[supplier];
+                    totalPurchaseValue += data.totalAmount || 0;
+                    totalPaidAmount += data.totalPaid || 0;
+                    totalDueAmount += data.totalDue || 0;
+                    totalPurchaseCount += data.purchaseCount || 0;
+                    
+                    statementHTML += `
+                        <tr>
+                            <td>${supplier}</td>
+                            <td>${data.purchaseCount}</td>
+                            <td>${formatNumber(data.totalAmount)} টাকা</td>
+                            <td>${formatNumber(data.totalPaid)} টাকা</td>
+                            <td>${formatNumber(data.totalDue)} টাকা</td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            statementHTML += `
+                    </tbody>
+                </table>
+                
+                <h4 style="color: #2a5298; margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid #2a5298; padding-bottom: 5px;">বিস্তারিত ক্রয় তালিকা</h4>
+                <table class="excel-table">
+                    <thead>
+                        <tr>
+                            <th>ক্রয় তারিখ</th>
+                            <th>পণ্য আইডি</th>
+                            <th>পণ্যের নাম</th>
+                            <th>সাপ্লাইয়ার</th>
+                            <th>পরিমাণ</th>
+                            <th>ক্রয় মূল্য</th>
+                            <th>মোট মূল্য</th>
+                            <th>জমা</th>
+                            <th>বাকি</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            filteredPurchases.forEach(purchase => {
+                statementHTML += `
+                    <tr>
+                        <td>${purchase.date}</td>
+                        <td>${purchase.productId}</td>
+                        <td>${purchase.productName}</td>
+                        <td>${purchase.supplier}</td>
+                        <td>${purchase.quantity}</td>
+                        <td>${formatNumber(purchase.purchasePrice)} টাকা</td>
+                        <td>${formatNumber(purchase.totalAmount)} টাকা</td>
+                        <td>${formatNumber(purchase.paidAmount)} টাকা</td>
+                        <td>${formatNumber(purchase.dueAmount)} টাকা</td>
+                    </tr>
+                `;
+            });
+            
+            statementHTML += `
+                    </tbody>
+                </table>
+                
+                <div class="summary-box" style="border: 2px solid #2a5298; background: linear-gradient(135deg, #f8f9fa, #e8f4f8); margin-top: 20px;">
+                    <h4 style="text-align: center; margin-bottom: 15px; color: #2a5298; border-bottom: 1px solid #2a5298; padding-bottom: 5px;">সারসংক্ষেপ</h4>
+                    <div class="summary-item">
+                        <span>মোট ক্রয়:</span>
+                        <span>${totalPurchaseCount} টি</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট ক্রয় মূল্য:</span>
+                        <span>${formatNumber(totalPurchaseValue)} টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট জমা:</span>
+                        <span>${formatNumber(totalPaidAmount)} টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট বাকি:</span>
+                        <span>${formatNumber(totalDueAmount)} টাকা</span>
+                    </div>
+                </div>
+            </div>
+            `;
+            
+            document.getElementById('statementResult').innerHTML = statementHTML;
+            document.getElementById('printStatementBtn').style.display = 'inline-block';
+        });
+
+        // লাভ-ক্ষতি স্টেটমেন্ট তৈরি
+        document.getElementById('generateProfitLossStatementBtn').addEventListener('click', function() {
+            const period = document.getElementById('statementPeriod').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            const data = dataManager.loadData();
+            const commissionRate = data.commissionRate || 0;
+            
+            let filteredTransactions = filterByDate(data.transactions, period, startDate, endDate);
+            let filteredPurchases = filterByDate(data.purchases, period, startDate, endDate, 'purchase');
+            
+            let totalPurchaseValue = 0;
+            let totalSalesValue = 0;
+            let totalCommission = 0;
+            let totalProfitLoss = 0;
+            
+            // মোট ক্রয় মূল্য হিসাব
+            filteredPurchases.forEach(purchase => {
+                totalPurchaseValue += purchase.totalAmount || 0;
+            });
+            
+            // মোট বিক্রয় মূল্য ও লাভ-ক্ষতি হিসাব
+            filteredTransactions.forEach(transaction => {
+                totalSalesValue += transaction.totalAmount || 0;
+                totalCommission += (transaction.quantity || 0) * commissionRate;
+                totalProfitLoss += transaction.profitLoss || 0;
+            });
+            
+            // লাভ-ক্ষতি শতাংশ
+            const profitLossPercentage = totalPurchaseValue > 0 ? 
+                ((totalProfitLoss / totalPurchaseValue) * 100).toFixed(2) : 0;
+            
+            // পণ্য অনুযায়ী লাভ-ক্ষতি বিশ্লেষণ
+            const productAnalysis = {};
+            filteredTransactions.forEach(transaction => {
+                if (!productAnalysis[transaction.productId]) {
+                    productAnalysis[transaction.productId] = {
+                        name: getProductName(transaction.productId),
+                        totalQuantity: 0,
+                        totalSales: 0,
+                        totalProfitLoss: 0
+                    };
+                }
+                productAnalysis[transaction.productId].totalQuantity += transaction.quantity || 0;
+                productAnalysis[transaction.productId].totalSales += transaction.totalAmount || 0;
+                productAnalysis[transaction.productId].totalProfitLoss += transaction.profitLoss || 0;
+            });
+            
+            // স্টেটমেন্ট তৈরি
+            let statementHTML = createStatementHeader('লাভ-ক্ষতি বিবরণী');
+            statementHTML += `
+                <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px solid #ddd;">
+                    <p style="margin: 5px 0;"><strong>সময়কাল:</strong> ${getPeriodText(period, startDate, endDate)}</p>
+                </div>
+                
+                <div class="summary-box" style="border: 2px solid #2a5298; background: linear-gradient(135deg, #f8f9fa, #e8f4f8); margin-bottom: 20px;">
+                    <h4 style="text-align: center; margin-bottom: 15px; color: #2a5298; border-bottom: 1px solid #2a5298; padding-bottom: 5px;">আর্থিক সারাংশ</h4>
+                    <div class="summary-item">
+                        <span>মোট ক্রয় মূল্য:</span>
+                        <span>${formatNumber(totalPurchaseValue)} টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট বিক্রয় মূল্য:</span>
+                        <span>${formatNumber(totalSalesValue)} টাকা</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট কমিশন:</span>
+                        <span>${formatNumber(totalCommission)} টাকা</span>
+                    </div>
+                    <div class="summary-item" style="${totalProfitLoss > 0 ? 'color: #28a745;' : totalProfitLoss < 0 ? 'color: #dc3545;' : ''}">
+                        <span>মোট লাভ/ক্ষতি:</span>
+                        <span>${formatNumber(totalProfitLoss)} টাকা</span>
+                    </div>
+                    <div class="summary-item" style="${totalProfitLoss > 0 ? 'color: #28a745;' : totalProfitLoss < 0 ? 'color: #dc3545;' : ''}">
+                        <span>লাভ/ক্ষতি শতাংশ:</span>
+                        <span>${profitLossPercentage}%</span>
+                    </div>
+                </div>
+            `;
+
+            if (Object.keys(productAnalysis).length > 0) {
+                statementHTML += `
+                    <h4 style="color: #2a5298; margin-bottom: 15px; border-bottom: 1px solid #2a5298; padding-bottom: 5px;">পণ্য অনুযায়ী লাভ-ক্ষতি বিশ্লেষণ</h4>
+                    <table class="excel-table">
+                        <thead>
+                            <tr>
+                                <th>পণ্য আইডি</th>
+                                <th>পণ্যের নাম</th>
+                                <th>বিক্রয় পরিমাণ</th>
+                                <th>মোট বিক্রয়</th>
+                                <th>মোট লাভ/ক্ষতি</th>
+                                <th>লাভ/ক্ষতি শতাংশ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                Object.keys(productAnalysis).forEach(productId => {
+                    const product = productAnalysis[productId];
+                    const profitPercentage = totalPurchaseValue > 0 ? 
+                        ((product.totalProfitLoss / totalPurchaseValue) * 100).toFixed(2) : 0;
+                    const profitClass = product.totalProfitLoss > 0 ? 'profit-positive' : 
+                                      product.totalProfitLoss < 0 ? 'profit-negative' : 'profit-neutral';
+                    
+                    statementHTML += `
+                        <tr>
+                            <td>${productId}</td>
+                            <td>${product.name}</td>
+                            <td>${product.totalQuantity}</td>
+                            <td>${formatNumber(product.totalSales)} টাকা</td>
+                            <td class="${profitClass}">${formatNumber(product.totalProfitLoss)} টাকা</td>
+                            <td class="${profitClass}">${profitPercentage}%</td>
+                        </tr>
+                    `;
+                });
+                
+                statementHTML += `
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            statementHTML += `
+            </div>
+            `;
+            
+            document.getElementById('statementResult').innerHTML = statementHTML;
+            document.getElementById('printStatementBtn').style.display = 'inline-block';
+        });
+
+        // তারিখ অনুযায়ী ফিল্টার ফাংশন
+        function filterByDate(data, period, startDate, endDate, type = 'sale') {
+            let filteredData = data;
+            
+            if (period === 'daily') {
+                const today = new Date().toISOString().split('T')[0];
+                filteredData = filteredData.filter(t => t.date === today);
+            } else if (period === 'monthly') {
+                const currentMonth = new Date().toISOString().substring(0, 7);
+                filteredData = filteredData.filter(t => t.date.startsWith(currentMonth));
+            } else if (period === 'yearly') {
+                const currentYear = new Date().getFullYear();
+                filteredData = filteredData.filter(t => t.date.startsWith(currentYear));
+            } else if (period === 'custom' && startDate && endDate) {
+                filteredData = filteredData.filter(t => t.date >= startDate && t.date <= endDate);
+            }
+            // 'all' এর জন্য কোন ফিল্টার প্রয়োগ করবে না
+            
+            return filteredData;
+        }
+
+        // স্টেটমেন্ট হেডার তৈরি
+        function createStatementHeader(title) {
+            return `
+                <div class="print-section">
+                    <div class="print-header">
+                        <div class="logo">SA Traders</div>
+                        <div class="tagline">বগুড়া - আপনার বিশ্বস্ত ব্যবসায়িক অংশীদার</div>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>বগুড়া, বাংলাদেশ</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span>০১৭১৩-৬৪৫৮৮৩</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>প্রিন্ট তারিখ: ${new Date().toLocaleDateString('bn-BD')}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="text-align: center; color: #2a5298; margin-bottom: 20px; border-bottom: 2px solid #2a5298; padding-bottom: 10px;">${title}</h3>
+            `;
+        }
+
+        // সময়কাল টেক্সট তৈরি
+        function getPeriodText(period, startDate, endDate) {
+            switch(period) {
+                case 'daily':
+                    return 'দৈনিক - ' + new Date().toLocaleDateString('bn-BD');
+                case 'monthly':
+                    return 'মাসিক - ' + new Date().toLocaleDateString('bn-BD', { month: 'long', year: 'numeric' });
+                case 'yearly':
+                    return 'বার্ষিক - ' + new Date().getFullYear();
+                case 'custom':
+                    return 'নির্দিষ্ট তারিখ - ' + startDate + ' থেকে ' + endDate;
+                default:
+                    return 'সমস্ত সময়';
+            }
+        }
+
+        // স্টক রিপোর্ট প্রিন্ট
+        document.getElementById('printStockBtn').addEventListener('click', function() {
+            const data = dataManager.loadData();
+            const products = data.products;
+            
+            let stockHTML = `
+                <div class="print-section">
+                    <div class="print-header">
+                        <div class="logo">SA Traders</div>
+                        <div class="tagline">বগুড়া - আপনার বিশ্বস্ত ব্যবসায়িক অংশীদার</div>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>বগুড়া, বাংলাদেশ</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span>০১৭১৩-৬৪৫৮৮৩</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>প্রিন্ট তারিখ: ${new Date().toLocaleDateString('bn-BD')}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 style="text-align: center; color: #2a5298; margin-bottom: 20px; border-bottom: 2px solid #2a5298; padding-bottom: 10px;">পণ্য স্টক রিপোর্ট</h3>
+                    
+                    <table class="excel-table">
+                        <thead>
+                            <tr>
+                                <th>পণ্য আইডি</th>
+                                <th>পণ্যের নাম</th>
+                                <th>ক্রয় মূল্য</th>
+                                <th>বিক্রয় মূল্য</th>
+                                <th>বর্তমান স্টক</th>
+                                <th>স্টক স্ট্যাটাস</th>
+                                <th>মোট ক্রয়</th>
+                                <th>মোট বিক্রয়</th>
+                                <th>স্টক মূল্য</th>
+                                <th>ক্যাটাগরি</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            let totalProducts = 0;
+            let totalStockQuantity = 0;
+            let totalStockValue = 0;
+            let lowStockProducts = 0;
+            
+            products.forEach(product => {
+                const stockValue = product.stock * product.purchasePrice;
+                const stockStatus = getStockStatus(product.stock);
+                
+                totalProducts++;
+                totalStockQuantity += product.stock;
+                totalStockValue += stockValue;
+                
+                if (product.stock <= 10) {
+                    lowStockProducts++;
+                }
+                
+                stockHTML += `
+                    <tr>
+                        <td>${product.id}</td>
+                        <td>${product.name}</td>
+                        <td>${formatNumber(product.purchasePrice)} টাকা</td>
+                        <td>${formatNumber(product.sellingPrice || (product.purchasePrice * 1.2))} টাকা</td>
+                        <td>${product.stock}</td>
+                        <td>${stockStatus.text}</td>
+                        <td>${product.totalPurchased || 0}</td>
+                        <td>${product.totalSold || 0}</td>
+                        <td>${formatNumber(stockValue)} টাকা</td>
+                        <td>${product.category || '-'}</td>
+                    </tr>
+                `;
+            });
+            
+            stockHTML += `
+                        </tbody>
+                    </table>
+                    
+                    <div class="summary-box" style="border: 2px solid #2a5298; background: linear-gradient(135deg, #f8f9fa, #e8f4f8); margin-top: 20px;">
+                        <h4 style="text-align: center; margin-bottom: 15px; color: #2a5298; border-bottom: 1px solid #2a5298; padding-bottom: 5px;">স্টক সারাংশ</h4>
+                        <div class="summary-item">
+                            <span>মোট পণ্য:</span>
+                            <span>${totalProducts} টি</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>মোট স্টক পরিমাণ:</span>
+                            <span>${totalStockQuantity}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>মোট স্টক মূল্য:</span>
+                            <span>${formatNumber(totalStockValue)} টাকা</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>নিম্ন স্টক পণ্য:</span>
+                            <span>${lowStockProducts} টি</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // নতুন উইন্ডোতে প্রিন্ট করার জন্য খুলুন
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>স্টক রিপোর্ট - SA Traders</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        .excel-table { border-collapse: collapse; width: 100%; font-size: 12px; }
+                        .excel-table th, .excel-table td { border: 1px solid #000; padding: 6px 8px; text-align: left; }
+                        .excel-table th { background-color: #f2f2f2; font-weight: bold; }
+                        .summary-box { border: 1px solid #000; padding: 10px; margin-top: 15px; background-color: #f9f9f9; }
+                        .print-header { background: #1e3c72; color: white; padding: 20px; text-align: center; margin-bottom: 20px; }
+                    </style>
+                </head>
+                <body>
+                    ${stockHTML}
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        });
+
+        // স্টেটমেন্ট প্রিন্ট
+        document.getElementById('printStatementBtn').addEventListener('click', function() {
+            window.print();
+        });
+
+        // ডেটা ম্যানেজমেন্ট ফাংশনালিটি
+        document.getElementById('saveDataBtn').addEventListener('click', function() {
+            if (dataManager.exportData()) {
+                alert('সমস্ত ডেটা সফলভাবে সেভ করা হয়েছে!');
+            } else {
+                alert('ডেটা সেভ করতে সমস্যা হয়েছে!');
+            }
+        });
+
+        document.getElementById('loadDataBtn').addEventListener('click', function() {
+            document.getElementById('loadFileInput').click();
+        });
+
+        document.getElementById('backupDataBtn').addEventListener('click', function() {
+            if (dataManager.createBackup()) {
+                alert('অটো ব্যাকআপ তৈরি করা হয়েছে!');
+                updateDataStatus();
+            } else {
+                alert('ব্যাকআপ তৈরি করতে সমস্যা হয়েছে!');
+            }
+        });
+
+        document.getElementById('restoreBackupBtn').addEventListener('click', function() {
+            if (confirm('আপনি কি ব্যাকআপ থেকে ডেটা রিস্টোর করতে চান? বর্তমান ডেটা হারিয়ে যাবে!')) {
+                if (dataManager.restoreFromBackup()) {
+                    alert('ব্যাকআপ থেকে ডেটা সফলভাবে রিস্টোর করা হয়েছে!');
+                    initializeDashboard();
+                } else {
+                    alert('ব্যাকআপ থেকে রিস্টোর করতে সমস্যা হয়েছে!');
+                }
+            }
+        });
+
+        // ফাইল ইনপুট তৈরি (লুকানো)
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.id = 'loadFileInput';
+        fileInput.accept = '.json';
+        fileInput.style.display = 'none';
+        document.body.appendChild(fileInput);
+
+        // ডেটা ইম্পোর্ট
+        fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (confirm('আপনি কি নিশ্চিত যে আপনি এই ডেটা লোড করতে চান? বর্তমান ডেটা ওভাররাইট হয়ে যাবে!')) {
+                    dataManager.importData(file)
+                        .then(success => {
+                            if (success) {
+                                alert('ডেটা সফলভাবে লোড করা হয়েছে!');
+                                initializeDashboard();
+                            }
+                        })
+                        .catch(error => {
+                            alert('ডেটা লোড করতে সমস্যা হয়েছে: ' + error.message);
+                        });
+                }
+            }
+        });
+
+        // ডেটা স্ট্যাটাস আপডেট
+        function updateDataStatus() {
+            const data = dataManager.loadData();
+            const customers = data.customers;
+            const products = data.products;
+            const transactions = data.transactions;
+            const purchases = data.purchases;
+            const backupExists = localStorage.getItem('saTradersBackup') !== null;
+            
+            let statusHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div style="padding: 8px; background: white; border-radius: 5px;">
+                        <strong>ক্রেতা:</strong> ${customers.length} জন
+                    </div>
+                    <div style="padding: 8px; background: white; border-radius: 5px;">
+                        <strong>পণ্য:</strong> ${products.length} টি
+                    </div>
+                    <div style="padding: 8px; background: white; border-radius: 5px;">
+                        <strong>বিক্রয়:</strong> ${transactions.length} টি
+                    </div>
+                    <div style="padding: 8px; background: white; border-radius: 5px;">
+                        <strong>ক্রয়:</strong> ${purchases.length} টি
+                    </div>
+                </div>
+                <div style="padding: 10px; background: ${backupExists ? '#d4edda' : '#fff3cd'}; border-radius: 5px; border: 1px solid ${backupExists ? '#c3e6cb' : '#ffeaa7'};">
+                    <strong>ব্যাকআপ স্ট্যাটাস:</strong> ${backupExists ? 'ব্যাকআপ উপলব্ধ' : 'কোনো ব্যাকআপ নেই'}
+                </div>
+                <div style="margin-top: 10px; padding: 10px; background: #e8f4f8; border-radius: 5px; border: 1px solid #b8daff;">
+                    <strong>সর্বশেষ আপডেট:</strong> ${new Date(data.lastUpdated).toLocaleString('bn-BD')}
+                </div>
+            `;
+            
+            document.getElementById('dataStatus').innerHTML = statusHTML;
+        }
+
+        // অটোসেভ ফিচার - প্রতি ২ মিনিটে অটো ব্যাকআপ
+        setInterval(function() {
+            dataManager.createBackup();
+            console.log('অটো ব্যাকআপ তৈরি করা হয়েছে');
+        }, 2 * 60 * 1000); // 2 minutes
+
+        // ড্যাশবোর্ড ইনিশিয়ালাইজেশন
+        function initializeDashboard() {
+            loadProducts();
+            loadCustomers();
+            loadTransactions();
+            loadPurchases();
+            updateProductDropdown();
+            loadCommissionRate();
+            updateProfitLossSummary();
+            updateDataStatus();
+            
+            // তারিখ সেট করা
+            setCurrentDate();
+        }
+
+        // প্রথম লোডে ডেটা স্ট্যাটাস আপডেট
+        window.addEventListener('load', function() {
+            setTimeout(updateDataStatus, 1000);
+        });
+    </script>
+</body>
+</html>
